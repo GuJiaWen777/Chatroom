@@ -41,12 +41,13 @@ import javax.swing.JTextField;
 */
 public class LoginFrame implements ActionListener{
 	ClientFrame client;
+	SQLTest sqlquery=new SQLTest();
 	JFrame  frame=new JFrame("登录界面");
 	JTextField fld1=new JTextField(16);//用户名
 	JTextField fld2=new JTextField(16);//密码框
 	JPanel jp=new JPanel();
 	JLabel lb1=new JLabel(new ImageIcon(LoginFrame.class.getResource("/1.jpg")));//头图
-	JLabel lb2=new JLabel(new ImageIcon(LoginFrame.class.getResource("/2.jpg")));//头像
+	JLabel lb2=new JLabel(new ImageIcon(LoginFrame.class.getResource("/2.png")));//头像
 	JCheckBox box1=new JCheckBox("记住密码");
 	JButton jb=new JButton(new ImageIcon(LoginFrame.class.getResource("/3.jpg")));//登录
 	JCheckBox box2=new JCheckBox("自动登录");
@@ -84,19 +85,24 @@ public class LoginFrame implements ActionListener{
 		frame.setVisible(true);
 	}
 	private int userVerify() {
+		int validate=sqlquery.login(fld1.getText(),fld2.getText());
 		if(fld1.getText().equals("")) {
 			return 1;
 		}
-		else {
-			return 0;
+		if(validate==1) {
+			return 2;
 		}
-		
+		return 0;
 	}
 	public void actionPerformed(ActionEvent e) {
+		int status=userVerify();
 		if(e.getSource()==jb){
-			if(userVerify()==1) {
+			if(status==1) {
 				JOptionPane.showMessageDialog(frame, "用户名不能为空");
-				System.out.println(userVerify());
+				return;
+			}
+			if(status==2) {
+				JOptionPane.showMessageDialog(frame, "用户名或密码错误");
 				return;
 			}
 			else {
